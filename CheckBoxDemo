@@ -1,63 +1,55 @@
+package Final;
 
-
-import javafx.application.Application;
-import javafx.geometry.Pos;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.scene.control.CheckBox;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
-import javafx.scene.text.Text;
-import javafx.stage.Stage;
+import javafx.scene.text.FontPosture;
+import javafx.scene.text.FontWeight;
 
-public class ButtonDemo extends Application {
-	protected Text text = new Text(50, 50, "JavaFX Programming");
+public class CheckBoxDemo extends ButtonDemo {
+	@Override
 	protected BorderPane getPane() {
+		BorderPane pane = super.getPane();
 		
-		BorderPane pane = new BorderPane();
+		VBox vbox = new VBox(20);
+		CheckBox bold = new CheckBox("BOLD");
+		CheckBox italic = new CheckBox("ITALIC");
+		vbox.getChildren().addAll(bold, italic);
+		vbox.setStyle("-fx-padding: 25, 25, 25, 25");
+		
+		pane.setRight(vbox);
 		
 		
-		text.setFont(Font.font("Times New Roman", 20));
+		EventHandler<ActionEvent> handler = (e->{
+			if(bold.isSelected() && italic.isSelected()) {
+				Font both = Font.font("Times New Roman", FontWeight.BOLD, FontPosture.ITALIC, 20);
+				text.setFont(both);
+			}else if(bold.isSelected()) {
+				Font bolded = Font.font("Times New Roman", FontWeight.BOLD, FontPosture.REGULAR ,20);
+				text.setFont(bolded);
+			}else if(italic.isSelected()) {
+				Font italicfont = Font.font("Times New Roman", FontWeight.NORMAL, FontPosture.ITALIC, 20);
+				text.setFont(italicfont);
+			}else {
+				Font normal = Font.font("Times New Roman", FontWeight.NORMAL, FontPosture.REGULAR, 20);
+				text.setFont(normal);
+			}
+		});
 		
-		Pane textPane = new Pane();
-		textPane.getChildren().add(text);
+		bold.setOnAction(handler);
+		italic.setOnAction(handler);
+			
 		
-		HBox hbox = new HBox(20);
-		Button left = new Button("LEFT");
-		Button right = new Button("RIGHT");
-		hbox.getChildren().addAll(left, right);
-		hbox.setAlignment(Pos.CENTER);
-		
-		pane.setCenter(textPane);
-		pane.setBottom(hbox);
-		
-		left.setOnAction(e -> 
-			text.setX(text.getX() - 10)
-		);
-		
-		right.setOnAction(e -> 
-			text.setX(text.getX() + 10)
-		);
 		
 		return pane;
 		
 	}
-
-	@Override
-	public void start(Stage primaryStage) throws Exception {
-		Scene scene = new Scene(getPane(), 450, 200);
-		
-		primaryStage.setTitle("ButtonDemo");
-		primaryStage.setScene(scene);
-		primaryStage.show();
-		
-
-	}
-
+	
 	public static void main(String[] args) {
 		launch(args);
-
+		
 	}
-
 }
